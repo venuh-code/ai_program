@@ -1,0 +1,290 @@
+
+一、第一章=====================================================
+转化为特征向量输入
+努力让自己预测的更准确的过程为学习，w，b决定是否预测准确
+
+W1 dim:(神经元个数, 特征数)
+b1 dim:(神经元个数, 1)
+W2 dim:(神经元个数, 特征数)
+b2 dim:(神经元个数, 1)
+--------------------------------------------
+Z1 dim:(神经元个数, 输入样本数)
+A1 dim:(神经元个数, 输入样本数)
+Z2 dim:(1, 3)
+A2 dim:(1, 3)
+
+X dim:(特征数，样本数)
+Y dim:(1，样本数)
+
+处理流程：
+-1、输入数据预处理，转化为特征向量
+0、工具函数；前向、成本函数、，反向，梯度下降，
+1、初始化w，b，确定多少层，每层多少神经元（输出层个数，隐藏层个数，输出层个数）
+2、计算前向传播(X)==>Z,A
+3、计算成本(A,Y)==>cost
+3、计算反向传播(A,Y,X,W,b)==>梯度
+4、进行梯度下降；
+5、重复步骤2；
+6、进行预测，使用前向传播，计算出a；
+w b z a j da dz db dw
+
+工具->模型->模型训练->预测
+
+	
+matplotlib：rcParams
+np.sqrt：平方根
+np.squeeze：去掉1的维度
+np.round(A2) # 对结果进行四舍五入，小于0.5就是0，否则就是1
+np.maximum(0,Z)
+np.random.randn
+np.nansum
+np切片：
+np.array
+np.multiply
+np.int64
+np.copy
+np.concatenate
+axes = plt.gca()
+axes.set_xlim([-1.5, 2.5])
+axes.set_ylim([-1, 1.5])
+np.meshgrid
+plt.contourf
+plt.scatter
+
+熟悉plt画图
+
+relu激活函数的带入得1
+数据、计算力，算法
+
+二、第二章：
+1、数据划分：训练、验证、测试，小数据：60：20：20，70：30，巨型数据：98/1/1，99.5/0.4/0.1；保证这仨数据来源一致；
+2、欠拟合，过拟合，即欠拟合又过拟合；分析时，要看具体情况，第一看数据来源，第二人类能清晰识别；
+3、贝叶斯误差；
+4、解决欠拟合：
+	尝试更大的神经网络
+	增加训练次数；
+	其它优化算法；
+	不同的神经网络架构
+5、解决过拟合：
+	更多的数据；
+	使用正则化；（首先处理），成本函数加尾巴，dw加尾巴，b数量少，可以忽略掉；
+    dropout:正向 a=a*d2,a=0,delete it,a=a/keep.prob,cost 不变，疑问：删除神经元，维度变化；
+            反向  da=da*d2，da=da/keep.prob 如果 A[1]A[1] 被keep_prob进行了缩放，那么它的导数 dA[1]dA[1] 也应该被相应地缩放
+               关于dropout你应该记住以下几个要点:
+            Dropout是一种正则化技术.
+            只能在训练模型时运行dropout，在使用模型时要把dropout关掉。
+            在前向传播和反向传播中都要实现dropout.
+            要记住在每层的前向传播和反向传播中都除以keep_prob来保证期望值不变. keep_prob=0.82经验值；
+	不同的神经网络架构；
+6、归一化；期望，方差，输入特征，学习的更快；
+7、梯度消失或爆炸：解决办法:合理初始化权重；每一层w加起来等于1最好，参数初始化，所有值相加等于1最好；
+    梯度检验：数值逼近：grad=(f(t+r)-f(t-r))/2r
+epoch：在整个训练集上完成一次训练
+
+优化算法：样本划分：
+    mini-batch:步子迈太大就找不到，太小就太慢；
+                选取依赖硬件，64-512，2000一下一般不分；
+                 cost会波动，如果徘徊，调小学习率
+    指数加权平均值：动量梯度下降，前几次梯度下降的平均值
+    RMSprop全方根，k一般取0.85-0.999
+    学习率衰减
+    
+ 调参：
+    超参数：层数L，每层个数n，学习率r，训练次数，激活函数，数据集，指数加权平均中的k，
+        Adam中k1,k2,u(but 0),学习衰减decayrate，minibatch大小
+    FIRST:学习率r
+    SECOND:动量梯度下降中k，每层神经元个数，minibatch大小
+    THRID：层数L，学习衰减decayrate
+    LAST：Adam中k1,k2,u(but 0)
+    
+    随机搜索法：
+        层数，个数：线性标尺随机均匀采样
+        学习率：指数标尺
+        动量梯度下降，1/1-k，指数尺标
+     
+    归一化隐藏层：z=arph*z+beita；隐藏层每次收到的数据都不一样；
+    使用模型时的归一化处理：minibatch的u和6计算出指数加权平均    
+ 
+softmax
+
+安装tensorflow：    
+    设置镜像地址：
+        - 'https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/'
+        - 'https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/'
+        
+    conda create -n tensorflow python=3.5
+    activate tensorflow /deactivate
+    pip install –-ignore-installed –-upgrade https://storage.googleapis.com/tensorflow/windows/cpu/tensorflow-1.12.0-cp35-cp35m-win_amd64.whl 
+
+    conda install ipython
+    conda install jupyter
+    pip install pypiwin32
+    ipython kernelspec install-self --user
+    pip install matplotlib
+    
+修改jupyter路径：
+    jupyter notebook –-generate-config
+    c.NotebookApp.notebook_dir = 'D:\python'
+    右键Jupyter的快捷方式（在开始菜单的Anaconda下面），或打开文件位置
+    选择属性，此时你把%USERPROFILE%删除即可（应该是有两处），
+    
+tensorflow 开发步骤：
+1、创建占位符：X = tf.placeholder(tf.float32, [n_x, None], name="X")
+2、初始化参数：tf.get_variable("W1", [25, 12288], initializer = tf.contrib.layers.xavier_initializer(seed=1))
+  
+网格搜索法和随机搜索法不太熟啊，网上找来看看
+tensorflow api:
+sess.run
+tf.equal(x,y) 判断x、y是否相等，相等返回true，or false
+tf.reduce_mean 求均值
+accuracy.eval
+
+
+第三章：===================================
+
+优秀的神经网络：
+1、在训练集上表现的足够好；
+2、验证集上有好的表现；
+3、测试集上有好的表现；
+4、在实际应用时表现的很好；
+
+正交化设计开关
+
+看cost曲线如果下降不是很平缓的话，那么其实还有下降空间，增加次数
+
+数据集划分：验证集确定哪个网络更好，测试集确定发布以后的好坏
+查准率，查全率，F1=2/(1/P+1/R)
+如何判断网络好坏：通过验证集，测试集，成本函数，优化指标，满足指标判断出网络好坏
+判断网络好坏标准改变：
+提升AI系统的一般流程：目的，让系统对所有数据，更多数据更好的拟合，既不欠拟合，又不过拟合；
+    评估人类误差-->推测贝叶斯误差->分析出系统的拟合度，bei-xun=可避免误差，即欠拟合误差；xun-yan=过拟合误差，欠误差>过误差，解决欠拟合，反之；
+手工分析错误：
+    100个识别错误的样本中，有5张狗没有识别出来，有些老虎被识别成了猫，还有不清楚的猫图像不能识别
+错误标签：
+    手误标签，比例太少，不用管；
+    系统型错误
+    错误标签所占的比重太大，则要处理，否则，放一边凉快去
+        判断指标：1、验证集的整体错误率 2、影响选择网络模型
+    修正错误标签：1、修正验证集，需修正测试集；2、检查识别对了的，是不是错错得对；
+                    3、不需修正训练集中的错误，可以来源不同，要去检查标签，以少时间去换打时间
+快速构建一个系统：验证集，测试集，评估指标建立好；
+    拟合度分析，误差分析，其它分析
+常用的误差分析：
+不常用的误差分析：
+解决异源问题：手工分析出不同，在训练样本中放入分析吃丶数据；人工合成技术
+迁移学习：
+
+实战编程：1、深度使用正则化，adam；2、改变数据源
+
+
+维度打印，问题定位
+
+第四章：================
+一、卷积层：减少参数的数量
+识别手语：0-5 6手势，softmax，数据集：训练1080=108*10，测试120=12*10，
+总=1100，1080/1100=98%，120/1100=2%：98：2
+指标：
+初始化 w b，维度
+卷积可以检测出图象的边缘
+多过滤器，每个过滤器检测不同的边缘特征
+调试卷积网络：f,s,p,过滤器数量
+可用于图像识别，目标检测：不需要识别出是什么，要位置
+边缘检测：正边缘，负边缘，横向边缘
+过滤器维度一般奇数，1，3，5，7
+1x1卷积
+
+
+池化层：降低计算量，增加稳定性，划重点学习，输入和输出层数相等，一般s、f=2
+
+（几个卷积+一个池化） * n
+
+二、LeNet-5：5x5x6+avgpool(2x2x6,s=2) + 5x5x16+avgpool(2x2x6,s=2)
+AlexNet,
+VGG，3x3,s=1 2x2,s=2
+ResNet：网上更多的论文，例子
+残差net
+inceptionNet：1x1,3x3,5x5
+使用git，github，寻找开源项目
+公开数据集：ImageNet，MS COCO， Pascal
+图像增强：水平镜像，随机裁剪，颜色偏移，图片旋转倾斜，图片扭曲
+
+三、keras使用：
+安装keras：
+pip install --upgrade keras
+pip install --upgrade pydot
+
+模型构建：创建占位符，Input()；
+    卷积后输出的维度：(64-7+2*3)/1+1=64 (64,64,32)
+    池化后输出维度：64-2
+    
+    happyModel = HappyModel(X_train.shape[1:])
+    happyModel.compile('adam', 'binary_crossentropy', metrics=['accuracy'])
+    happyModel.fit(X_train, Y_train, epochs=40, batch_size=50)
+    preds = happyModel.evaluate(X_test, Y_test, batch_size=32, verbose=1, sample_weight=None)
+    happyModel.predict(x)
+    
+keras.layers.Conv2D参数：
+    filter：整数，卷积输出滤波器的数量。
+    kernel_size：2个整数或2个整数构成的元组/列表，指定2-dim卷积窗口的高度和宽度。可以是单个整数，以指定具有相同值的所有空间维度。
+    strides：2个整数或2个整数构成的元组/列表，指定沿着高度和宽度卷积的步长，如果是单个整数则指定所有的空间维度具有相同的值。
+    padding：有“valid”或“same”
+    data_format：一个字符串，一个channels_last或channels_first，前者对应的输入shape是(batch, height, width, channels)，后者对应的shape是(batch, channels, height, width)。默认的是“channels_last”
+    dilation_rate：2个整数或2个整数构成的元组/列表，指定用于扩张卷积的扩张率。可以是单个整数，以指定具有相同值的所有空间维度。
+    activation：如“relu”、“sigmoid”等
+    use_bias：Boolean，该层是否使用偏置向量。
+    kernel_initializer：kernel权重矩阵的初始化器
+    bias_initializer：偏置向量的初始化器
+    kernel_regularizer：应用于kernel权重矩阵的正则化函数
+    bias_regularizer：应用于偏置向量的正则化函数
+    activity_regularizer：应用于图层输出的正则化函数（它的“激活”）
+    kernel_constraint：应用于内核矩阵的约束函数
+    bias_constraint：应用于偏置向量的约束函数
+    
+    1.1 如果padding = ‘VALID’
+    new_height = new_width = (W – F + 1) / S （结果向上取整）
+    1.2 如果padding = ‘SAME’
+    new_height = new_width = W / S （结果向上取整），从结果我们可以看出
+    
+git：
+git config --global user.name "venuhjz"
+git config --global user.email "2375536196@qq.com"
+创建仓库：
+git init
+git add src
+git commit -m "add src"
+git status
+git diff
+git log
+回退到上个版本：
+git reset --hard HEAD^ ,HEAD^, HEAD~100
+git reflog查询版本号
+git reset --hard 版本号
+撤销 git checkout -- file
+删除 rm file；git commit
+
+远程仓库：
+ssh-keygen -t rsa -C "1186798521@qq.com"
+git remote add origin https://github.com/venuh-code/ai_program.git
+git push -u origin master
+git push origin master
+
+下载远程库：
+git  clone UML
+
+创建分支
+git checkout -b dev
+查看分支
+git branch
+切换分支
+git checkout master
+合并
+git merge dev
+删除
+git brahch -d name
+
+多人协作：
+
+
+
+
+
